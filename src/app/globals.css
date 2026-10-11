@@ -1,26 +1,108 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Palet Warna Baru SMKN 26 Jakarta */
+  --color-primary-dark: #0D1A63;
+  /* Deep Navy */
+  --color-primary: #1A2CA3;
+  /* Royal Blue */
+  --color-primary-light: #2845D6;
+  /* Bright Blue */
+
+  --color-accent: #F68048;
+  /* Warm Orange */
+  --color-accent-light: #FFA175;
+  /* Soft Light Orange */
+  --color-accent-dark: #D85F27;
+  /* Deep Orange */
+
+  --color-neutral-50: #F8FAFC;
+  --color-neutral-100: #F1F5F9;
+  --color-neutral-200: #E2E8F0;
+  --color-neutral-300: #CBD5E1;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1E293B;
+  --color-neutral-900: #0F172A;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --background: #FFFFFF;
+  --foreground: #0D1A63;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #0D1A63;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #F68048;
+}
+
+/* Animasi fade-in */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* Animasi pulse halus untuk CTA */
+@keyframes subtlePulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(246, 128, 72, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 0 10px rgba(246, 128, 72, 0);
+  }
+}
+
+.animate-subtle-pulse {
+  animation: subtlePulse 2.5s infinite;
+}
+
+/* Gradient text utility */
+.text-gradient {
+  background: linear-gradient(135deg, #F68048, #FFA175);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
