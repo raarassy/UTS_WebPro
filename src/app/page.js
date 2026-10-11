@@ -56,21 +56,6 @@ export default function Home() {
             Berdiri sejak tahun 1970, sekolah ini berkomitmen tinggi dalam mencetak tenaga kerja teknik profesional yang berkarakter kuat, berdisiplin tinggi, serta siap bersaing di dunia industri nasional maupun internasional.
           </p>
 
-          {/* CTA Buttons */}
-          <div className="animate-fade-in-up flex flex-col gap-4 sm:flex-row">
-            <Link
-              href="/about"
-              className="animate-subtle-pulse rounded-xl bg-[#F68048] px-8 py-3.5 text-sm font-bold text-[#0D1A63] shadow-lg shadow-[#F68048]/25 transition-all duration-300 hover:-translate-y-1 hover:bg-[#D85F27] hover:text-[#0D1A63] hover:shadow-xl sm:text-base"
-            >
-              Profil Sekolah
-            </Link>
-            <Link
-              href="/berita"
-              className="rounded-xl border border-white/20 bg-white/10 px-8 py-3.5 text-sm font-bold text-white backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-white/40 hover:bg-white/20 sm:text-base"
-            >
-              Berita Terkini
-            </Link>
-          </div>
 
           {/* Kartu Statistik Interaktif */}
           <div className="animate-fade-in-up mt-16 grid w-full max-w-4xl grid-cols-2 gap-4 sm:grid-cols-4">
