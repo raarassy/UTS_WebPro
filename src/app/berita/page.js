@@ -1,18 +1,20 @@
-import BeritaCard from "@/components/BeritaCard";
-import dataBerita from "@/data/berita";
+"use client";
 
-export const metadata = {
-  title: "Berita — SMKN 26 Jakarta",
-  description:
-    "Kumpulan berita dan informasi terkini seputar kegiatan, prestasi, dan program SMK Negeri 26 Jakarta.",
-};
+import { useState, useEffect } from "react";
+import BeritaCard from "@/components/BeritaCard";
+import { getBerita } from "@/utils/storage";
 
 export default function BeritaPage() {
+  const [daftarBerita, setDaftarBerita] = useState([]);
+
+  useEffect(() => {
+    setDaftarBerita(getBerita());
+  }, []);
+
   return (
     <>
       {/* ========== HEADER WITH MODERN GRID TEXTURE ========== */}
       <section className="relative overflow-hidden bg-[#0D1A63] py-16 sm:py-24">
-        {/* Modern Grid Lines Texture Overlay */}
         <div className="absolute inset-0 opacity-20">
           <div
             className="absolute inset-0"
@@ -24,7 +26,6 @@ export default function BeritaPage() {
           />
         </div>
 
-        {/* Ambient Glow Effects */}
         <div className="absolute -top-32 -right-32 h-80 w-80 rounded-full bg-[#2845D6]/30 blur-[100px]" />
         <div className="absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-[#F68048]/20 blur-[100px]" />
 
@@ -45,18 +46,16 @@ export default function BeritaPage() {
       {/* ========== DAFTAR BERITA ========== */}
       <section className="bg-slate-50 py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {/* Info jumlah berita */}
           <div className="mb-8 flex items-center justify-between">
             <p className="text-sm font-medium text-slate-600">
               Menampilkan{" "}
-              <span className="font-bold text-[#0D1A63]">{dataBerita.length}</span>{" "}
+              <span className="font-bold text-[#0D1A63]">{daftarBerita.length}</span>{" "}
               berita
             </p>
           </div>
 
-          {/* Grid Berita */}
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {dataBerita.map((berita) => (
+            {daftarBerita.map((berita) => (
               <BeritaCard key={berita.id} berita={berita} />
             ))}
           </div>

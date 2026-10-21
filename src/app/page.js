@@ -1,9 +1,17 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import BeritaCard from "@/components/BeritaCard";
-import dataBerita from "@/data/berita";
+import { getBerita } from "@/utils/storage";
 
 export default function Home() {
-  const beritaTerbaru = dataBerita.slice(0, 3);
+  const [beritaTerbaru, setBeritaTerbaru] = useState([]);
+
+  useEffect(() => {
+    const allBerita = getBerita();
+    setBeritaTerbaru(allBerita.slice(0, 3));
+  }, []);
 
   return (
     <>
