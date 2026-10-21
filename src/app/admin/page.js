@@ -144,7 +144,7 @@ export default function AdminPage() {
                                 type="text"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
-                                placeholder="Masukkan username (admin)"
+                                placeholder="Masukkan username"
                                 className="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm outline-none focus:border-[#1A2CA3] focus:ring-1 focus:ring-[#1A2CA3]"
                                 required
                             />
@@ -158,7 +158,7 @@ export default function AdminPage() {
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Masukkan password (admin123)"
+                                placeholder="Masukkan password"
                                 className="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm outline-none focus:border-[#1A2CA3] focus:ring-1 focus:ring-[#1A2CA3]"
                                 required
                             />
