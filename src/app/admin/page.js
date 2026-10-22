@@ -171,10 +171,6 @@ export default function AdminPage() {
                             Masuk Ke Dashboard
                         </button>
                     </form>
-
-                    <p className="text-center text-xs text-slate-400">
-                        Default Akun: <span className="font-bold text-slate-600">admin / admin123</span>
-                    </p>
                 </div>
             </div>
         );
