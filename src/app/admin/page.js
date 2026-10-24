@@ -28,18 +28,23 @@ export default function AdminPage() {
         const session = sessionStorage.getItem("admin_logged_in");
         if (session === "true") {
             setIsLoggedIn(true);
-            setBeritaList(getBerita());
+            fetchData();
         }
     }, []);
 
-    // Handle Login
-    const handleLogin = (e) => {
+    const fetchData = async () => {
+        const data = await getBerita();
+        // Pastikan data yang dimasukkan selalu berupa Array
+        setBeritaList(Array.isArray(data) ? data : []);
+    };
+
+    // Handle Login (Diperbaiki menggunakan async/await & fetchData)
+    const handleLogin = async (e) => {
         e.preventDefault();
-        // Default Login Sederhana (Username: admin, Password: admin123)
         if (username === "rasyi" && password === "rasyi2772") {
             setIsLoggedIn(true);
             sessionStorage.setItem("admin_logged_in", "true");
-            setBeritaList(getBerita());
+            await fetchData();
             setLoginError("");
         } else {
             setLoginError("Username atau password salah!");
@@ -64,7 +69,7 @@ export default function AdminPage() {
     };
 
     // Handle Submit Form (Tambah / Edit)
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!formJudul || !formRingkasan) {
             alert("Judul dan Ringkasan wajib diisi!");
@@ -72,26 +77,25 @@ export default function AdminPage() {
         }
 
         if (isEditing) {
-            const updated = updateBerita(editId, {
+            await updateBerita(editId, {
                 judul: formJudul,
                 kategori: formKategori,
                 ringkasan: formRingkasan,
                 isi: formIsi,
                 gambar: formGambar,
             });
-            setBeritaList(updated);
             alert("Berita berhasil diperbarui!");
         } else {
-            const updated = addBerita({
+            await addBerita({
                 judul: formJudul,
                 kategori: formKategori,
                 ringkasan: formRingkasan,
                 isi: formIsi,
                 gambar: formGambar,
             });
-            setBeritaList(updated);
             alert("Berita baru berhasil ditambahkan!");
         }
+        await fetchData();
         resetForm();
     };
 
@@ -107,10 +111,10 @@ export default function AdminPage() {
     };
 
     // Handle Delete
-    const handleDelete = (id) => {
+    const handleDelete = async (id) => {
         if (confirm("Apakah Anda yakin ingin menghapus berita ini?")) {
-            const updated = deleteBerita(id);
-            setBeritaList(updated);
+            await deleteBerita(id);
+            await fetchData();
         }
     };
 
@@ -135,7 +139,7 @@ export default function AdminPage() {
                         </div>
                     )}
 
-                    <form onSubmit={handleLogin} className="space-y-4">
+                    <form onSubmit={handleLogin} className="space-y-4" suppressHydrationWarning>
                         <div>
                             <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
                                 Username
@@ -228,11 +232,11 @@ export default function AdminPage() {
                     <div>
                         <h1 className="text-2xl font-black text-[#0D1A63]">Manajemen Berita</h1>
                         <p className="text-xs text-slate-500">
-                            Tambah, edit, dan hapus berita sekolah yang tersimpan di localStorage.
+                            Tambah, edit, dan hapus berita sekolah yang tersimpan di database Supabase.
                         </p>
                     </div>
                     <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700">
-                        ● Status: Storage Active
+                        ● Status: Supabase Active
                     </span>
                 </header>
 
@@ -289,6 +293,19 @@ export default function AdminPage() {
 
                             <div>
                                 <label className="block text-xs font-bold text-slate-700 mb-1">
+                                    Isi Berita Lengkap
+                                </label>
+                                <textarea
+                                    value={formIsi}
+                                    onChange={(e) => setFormIsi(e.target.value)}
+                                    rows="5"
+                                    placeholder="Masukkan seluruh isi/paragraf berita lengkap di sini..."
+                                    className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs outline-none focus:border-[#1A2CA3]"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-bold text-slate-700 mb-1">
                                     URL Gambar (Path)
                                 </label>
                                 <input
@@ -323,12 +340,12 @@ export default function AdminPage() {
                     {/* TABEL DAFTAR BERITA */}
                     <div className="lg:col-span-2 rounded-2xl bg-white p-6 shadow-sm border border-slate-200">
                         <h2 className="text-base font-bold text-[#0D1A63] mb-4 pb-2 border-b border-slate-100 flex items-center justify-between">
-                            <span>Daftar Berita ({beritaList.length})</span>
+                            <span>Daftar Berita ({(beritaList || []).length})</span>
                         </h2>
 
-                        {beritaList.length === 0 ? (
+                        {(!beritaList || beritaList.length === 0) ? (
                             <p className="py-8 text-center text-xs text-slate-400">
-                                Belum ada berita yang tersimpan di localStorage.
+                                Belum ada berita yang tersimpan di Supabase.
                             </p>
                         ) : (
                             <div className="overflow-x-auto">
@@ -342,7 +359,7 @@ export default function AdminPage() {
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-100">
-                                        {beritaList.map((item) => (
+                                        {(beritaList || []).map((item) => (
                                             <tr key={item.id} className="hover:bg-slate-50/80">
                                                 <td className="py-3 px-3 font-semibold text-slate-800 max-w-[200px] truncate">
                                                     {item.judul}

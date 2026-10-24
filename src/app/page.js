@@ -9,8 +9,11 @@ export default function Home() {
   const [beritaTerbaru, setBeritaTerbaru] = useState([]);
 
   useEffect(() => {
-    const allBerita = getBerita();
-    setBeritaTerbaru(allBerita.slice(0, 3));
+    const loadBerita = async () => {
+      const data = await getBerita();
+      setBeritaTerbaru(data.slice(0, 3));
+    };
+    loadBerita();
   }, []);
 
   return (

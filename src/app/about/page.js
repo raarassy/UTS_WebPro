@@ -55,21 +55,25 @@ export default function AboutPage() {
                 {[
                   {
                     tahun: "1970",
+                    badge: "70",
                     judul: "Berdirinya STM Pembangunan Jakarta",
                     desk: "Didirikan sebagai salah satu dari delapan STM Pembangunan di Indonesia dengan program pendidikan 4 tahun, bertujuan mencetak tenaga teknik menengah yang siap kerja.",
                   },
                   {
                     tahun: "1997",
+                    badge: "97",
                     judul: "Perubahan Nama Menjadi SMKN 26 Jakarta",
                     desk: "Seiring kebijakan nasional, STM Pembangunan Jakarta berubah nama menjadi SMK Negeri 26 Jakarta dengan kurikulum vokasi kejuruan yang terus diselaraskan.",
                   },
                   {
                     tahun: "2010-an",
+                    badge: "10",
                     judul: "Modernisasi Fasilitas & Kurikulum",
                     desk: "Pembaharuan bengkel, laboratorium, dan penerapan kurikulum berbasis kompetensi industri serta program link and match dengan perusahaan.",
                   },
                   {
                     tahun: "Sekarang",
+                    badge: "•",
                     judul: "SMK Unggulan Jakarta Timur",
                     desk: "Menyelenggarakan 6 konsentrasi keahlian dengan lulusan yang terserap di berbagai perusahaan nasional dan multinasional.",
                   },
@@ -77,7 +81,7 @@ export default function AboutPage() {
                   <div key={idx} className="flex gap-4">
                     <div className="flex flex-col items-center">
                       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#1A2CA3] text-xs font-bold text-white shadow-md">
-                        {item.tahun.length > 4 ? "•" : item.tahun.slice(-2)}
+                        {item.badge}
                       </div>
                       {idx < 3 && (
                         <div className="mt-1 h-full w-0.5 bg-gradient-to-b from-[#1A2CA3]/40 to-transparent" />

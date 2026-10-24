@@ -1,65 +1,97 @@
-import dataBeritaAwal from "@/data/berita";
+import { supabase } from "./supabase";
 
-const BERITA_KEY = "smkn26_berita";
+// Ambil semua berita dari Supabase (diurutkan dari yang terbaru)
+export const getBerita = async () => {
+    try {
+        const { data, error } = await supabase
+            .from("berita")
+            .select("*")
+            .order("created_at", { ascending: false });
 
-// Fungsi untuk menginisialisasi data awal ke localStorage jika masih kosong
-export const initStorage = () => {
-    if (typeof window !== "undefined") {
-        const existingData = localStorage.getItem(BERITA_KEY);
-        if (!existingData) {
-            localStorage.setItem(BERITA_KEY, JSON.stringify(dataBeritaAwal));
+        if (error) {
+            console.error("Error fetching berita:", error);
+            return [];
         }
+        return data || [];
+    } catch (err) {
+        console.error("Unexpected error:", err);
+        return [];
     }
 };
 
-// Ambil semua berita dari localStorage
-export const getBerita = () => {
-    if (typeof window !== "undefined") {
-        initStorage();
-        const data = localStorage.getItem(BERITA_KEY);
-        return data ? JSON.parse(data) : [];
+// Ambil 1 berita spesifik berdasarkan ID untuk halaman detail (/berita/[id])
+export const getBeritaById = async (id) => {
+    try {
+        const { data, error } = await supabase
+            .from("berita")
+            .select("*")
+            .eq("id", id)
+            .single();
+
+        if (error) {
+            console.error("Error fetching detail berita:", error);
+            return null;
+        }
+        return data;
+    } catch (err) {
+        console.error("Unexpected error:", err);
+        return null;
     }
-    return [];
 };
 
-// Simpan/Update seluruh daftar berita ke localStorage
-export const saveBerita = (beritaList) => {
-    if (typeof window !== "undefined") {
-        localStorage.setItem(BERITA_KEY, JSON.stringify(beritaList));
-    }
-};
+// Tambah berita baru ke Supabase
+export const addBerita = async (beritaBaru) => {
+    try {
+        const newItem = {
+            ...beritaBaru,
+            tanggal: new Date().toLocaleDateString("id-ID", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+            }),
+        };
 
-// Tambah berita baru
-export const addBerita = (beritaBaru) => {
-    const currentList = getBerita();
-    const newItem = {
-        ...beritaBaru,
-        id: Date.now().toString(), // ID unik menggunakan timestamp
-        tanggal: new Date().toLocaleDateString("id-ID", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-        }),
-    };
-    const updatedList = [newItem, ...currentList];
-    saveBerita(updatedList);
-    return updatedList;
+        const { data, error } = await supabase
+            .from("berita")
+            .insert([newItem])
+            .select();
+
+        if (error) throw error;
+        return data;
+    } catch (err) {
+        console.error("Error adding berita:", err);
+        alert("Gagal menambah berita: " + err.message);
+        return null;
+    }
 };
 
 // Edit berita berdasarkan ID
-export const updateBerita = (id, updatedData) => {
-    const currentList = getBerita();
-    const updatedList = currentList.map((item) =>
-        item.id === id ? { ...item, ...updatedData } : item
-    );
-    saveBerita(updatedList);
-    return updatedList;
+export const updateBerita = async (id, updatedData) => {
+    try {
+        const { data, error } = await supabase
+            .from("berita")
+            .update(updatedData)
+            .eq("id", id)
+            .select();
+
+        if (error) throw error;
+        return data;
+    } catch (err) {
+        console.error("Error updating berita:", err);
+        alert("Gagal mengupdate berita: " + err.message);
+        return null;
+    }
 };
 
 // Hapus berita berdasarkan ID
-export const deleteBerita = (id) => {
-    const currentList = getBerita();
-    const updatedList = currentList.filter((item) => item.id !== id);
-    saveBerita(updatedList);
-    return updatedList;
+export const deleteBerita = async (id) => {
+    try {
+        const { error } = await supabase.from("berita").delete().eq("id", id);
+        if (error) throw error;
+        return true;
+    } catch (err) {
+        console.error("Error deleting berita:", err);
+        alert("Gagal menghapus berita: " + err.message);
+        return false;
+    }
 };

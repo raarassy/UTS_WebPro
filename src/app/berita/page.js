@@ -6,9 +6,17 @@ import { getBerita } from "@/utils/storage";
 
 export default function BeritaPage() {
   const [daftarBerita, setDaftarBerita] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setDaftarBerita(getBerita());
+    const loadBerita = async () => {
+      setLoading(true);
+      const data = await getBerita();
+      // Pastikan data selalu dalam bentuk Array
+      setDaftarBerita(Array.isArray(data) ? data : []);
+      setLoading(false);
+    };
+    loadBerita();
   }, []);
 
   return (
@@ -49,16 +57,32 @@ export default function BeritaPage() {
           <div className="mb-8 flex items-center justify-between">
             <p className="text-sm font-medium text-slate-600">
               Menampilkan{" "}
-              <span className="font-bold text-[#0D1A63]">{daftarBerita.length}</span>{" "}
+              <span className="font-bold text-[#0D1A63]">
+                {loading ? "..." : (daftarBerita || []).length}
+              </span>{" "}
               berita
             </p>
           </div>
 
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {daftarBerita.map((berita) => (
-              <BeritaCard key={berita.id} berita={berita} />
-            ))}
-          </div>
+          {loading ? (
+            <div className="py-12 text-center">
+              <p className="text-sm font-bold text-slate-400">
+                Memuat berita dari Supabase...
+              </p>
+            </div>
+          ) : (!daftarBerita || daftarBerita.length === 0) ? (
+            <div className="py-12 text-center">
+              <p className="text-sm font-bold text-slate-400">
+                Belum ada berita yang diterbitkan.
+              </p>
+            </div>
+          ) : (
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              {(daftarBerita || []).map((berita) => (
+                <BeritaCard key={berita.id} berita={berita} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </>
